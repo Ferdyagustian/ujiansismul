@@ -9,7 +9,7 @@
 <footer class="sv-footer">
     <div class="sv-container">
         <p class="mb-0">
-            &copy; <?= date('Y') ?> MLBB Skin Vault &mdash; Tugas Ujian Sistem Multimedia
+            &copy; <?= date('Y') ?> Galeri Kenangan &mdash; Tugas Ujian Sistem Multimedia
             &nbsp;&middot;&nbsp;
             <a href="<?= site_url('anggota') ?>">Tim 4IA28</a>
         </p>

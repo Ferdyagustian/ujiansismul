@@ -67,8 +67,8 @@
 
                 <!-- Card Body -->
                 <div class="sv-card-body">
-                    <h2 class="sv-card-hero-name"><?= htmlspecialchars($k['judul']) ?></h2>
-                    <p class="sv-card-skin-name text-muted" style="font-size: 0.85rem; margin-bottom: 0.25rem;">
+                    <h2 class="sv-card-title"><?= htmlspecialchars($k['judul']) ?></h2>
+                    <p class="sv-card-subtitle text-muted" style="font-size: 0.85rem; margin-bottom: 0.25rem;">
                         <i class="bi bi-calendar3"></i> <?= htmlspecialchars($k['tanggal_momen']) ?>
                     </p>
                     <div class="sv-card-meta">

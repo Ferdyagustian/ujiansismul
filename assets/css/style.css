@@ -351,7 +351,7 @@ main { flex: 1 0 auto; }
     gap: .5rem;
 }
 
-.sv-card-hero-name {
+.sv-card-title {
     font-size: 1.0625rem;
     font-weight: 700;
     color: var(--text-primary);
@@ -360,7 +360,7 @@ main { flex: 1 0 auto; }
     line-height: 1.2;
 }
 
-.sv-card-skin-name {
+.sv-card-subtitle {
     font-size: .875rem;
     color: var(--accent-bright);
     font-weight: 500;
@@ -415,7 +415,7 @@ main { flex: 1 0 auto; }
 .badge-role.tank      { background: rgba(59,130,246,.15);  color: #93c5fd; border: 1px solid rgba(59,130,246,.3); }
 .badge-role.support   { background: rgba(244,114,182,.15); color: #f9a8d4; border: 1px solid rgba(244,114,182,.3); }
 
-.badge-skin {
+.badge-info {
     display: inline-block;
     font-size: .6875rem;
     font-weight: 600;

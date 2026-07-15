@@ -44,10 +44,10 @@
         
         <div style="display: flex; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap;">
             <span class="badge-role"><i class="bi bi-tag-fill me-1"></i><?= htmlspecialchars($kenangan->kategori) ?></span>
-            <span class="badge-skin" style="background: rgba(255,255,255,0.1); color: var(--text); border: 1px solid rgba(255,255,255,0.2);">
+            <span class="badge-info" style="background: rgba(255,255,255,0.1); color: var(--text); border: 1px solid rgba(255,255,255,0.2);">
                 <i class="bi bi-calendar3 me-1"></i><?= htmlspecialchars($kenangan->tanggal_momen) ?>
             </span>
-            <span class="badge-skin" style="background: rgba(255,255,255,0.1); color: var(--text); border: 1px solid rgba(255,255,255,0.2);">
+            <span class="badge-info" style="background: rgba(255,255,255,0.1); color: var(--text); border: 1px solid rgba(255,255,255,0.2);">
                 <i class="bi bi-images me-1"></i><?= count($kenangan->fotos) ?> Foto
             </span>
         </div>
