@@ -1,0 +1,22 @@
+# CodeIgniter 3
+application/cache/*
+!application/cache/index.html
+!application/cache/.htaccess
+
+application/logs/*
+!application/logs/index.html
+
+# Uploads
+assets/uploads/kenangan/*
+!assets/uploads/kenangan/index.html
+!assets/uploads/kenangan/.gitkeep
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
