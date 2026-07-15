@@ -9,13 +9,13 @@ $popup_state_class = $should_open_modal ? '' : 'hidden';
     <div class="surface-card p-6 sm:p-8">
         <span class="inline-flex items-center gap-2 rounded-full border border-[#4285F4]/15 bg-[#4285F4]/8 px-3 py-1 text-xs font-bold uppercase tracking-[0.22em] text-[#174EA6]">
             <span class="google-dot google-dot--blue"></span>
-            Home board
+            Memory canvas
         </span>
         <h1 class="mt-5 max-w-3xl font-display text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">
-            Beranda dibuat ringan, dan tambah kenangan sekarang lewat popup.
+            Satu ruang sederhana untuk menyimpan momen yang ingin selalu diingat.
         </h1>
         <p class="mt-4 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
-            Halaman utama fokus ke CTA dan ringkasan singkat. Form penuh dihapus, diganti modal dengan gaya visual yang sama seperti halaman sebelumnya.
+            Tambahkan kenangan lewat popup singkat, lalu lihat seluruh koleksi visualnya di halaman galeri.
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
             <button type="button" class="btn-google-primary" data-modal-open="create-memory-modal">
@@ -34,7 +34,7 @@ $popup_state_class = $should_open_modal ? '' : 'hidden';
     </div>
 
     <div class="surface-card p-6">
-        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-400">Ringkasan</p>
+        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-400">Snapshot</p>
         <div class="mt-5 space-y-3 text-sm text-slate-600">
             <div class="soft-badge justify-between">
                 <span class="inline-flex items-center gap-2">
@@ -79,11 +79,11 @@ $popup_state_class = $should_open_modal ? '' : 'hidden';
     <div class="surface-card p-6 sm:p-8">
         <div class="flex items-start justify-between gap-4">
             <div>
-                <p class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-400">Dashboard</p>
-                <h2 class="mt-2 font-display text-3xl font-bold tracking-tight text-slate-950">Beranda sekarang fokus ke statistik memori.</h2>
-                <p class="mt-3 max-w-2xl text-sm leading-7 text-slate-600">Galeri dan seluruh tampilan gambar dipisah ke halaman `/galeri`. Di sini hanya ada aksi cepat dan ringkasan data.</p>
+                <p class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-400">Highlights</p>
+                <h2 class="mt-2 font-display text-3xl font-bold tracking-tight text-slate-950">Ringkasan kecil dari memori yang sudah terkumpul.</h2>
+                <p class="mt-3 max-w-2xl text-sm leading-7 text-slate-600">Beranda dipakai untuk melihat gambaran umum, sementara galeri tetap menjadi tempat utama untuk menikmati foto.</p>
             </div>
-            <span class="soft-badge w-auto text-xs text-slate-500">No gallery preview</span>
+            <span class="soft-badge w-auto text-xs text-slate-500">Quick overview</span>
         </div>
 
         <div class="mt-8 grid gap-4 md:grid-cols-2">
@@ -117,14 +117,14 @@ $popup_state_class = $should_open_modal ? '' : 'hidden';
     </div>
 
     <div class="surface-card p-6 sm:p-8">
-        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-400">Aksi Cepat</p>
+        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-400">Quick Actions</p>
         <div class="mt-5 space-y-4">
             <div class="rounded-2xl border border-slate-900/8 bg-white/72 p-4">
                 <div class="flex items-center gap-3">
                     <span class="google-dot google-dot--blue"></span>
                     <h3 class="text-lg font-bold text-slate-950">Tambah Kenangan</h3>
                 </div>
-                <p class="mt-3 text-sm leading-6 text-slate-600">Buka popup form untuk simpan momen baru tanpa pindah halaman.</p>
+                <p class="mt-3 text-sm leading-6 text-slate-600">Simpan momen baru dengan form ringkas tanpa keluar dari beranda.</p>
                 <button type="button" class="btn-google-primary mt-4" data-modal-open="create-memory-modal">Buka Popup</button>
             </div>
             <div class="rounded-2xl border border-slate-900/8 bg-white/72 p-4">
@@ -132,7 +132,7 @@ $popup_state_class = $should_open_modal ? '' : 'hidden';
                     <span class="google-dot google-dot--green"></span>
                     <h3 class="text-lg font-bold text-slate-950">Buka Galeri</h3>
                 </div>
-                <p class="mt-3 text-sm leading-6 text-slate-600">Lihat semua kartu gambar dan interaksi hover lengkap hanya di halaman galeri.</p>
+                <p class="mt-3 text-sm leading-6 text-slate-600">Masuk ke halaman galeri untuk melihat semua kenangan dalam tampilan visual penuh.</p>
                 <a href="<?= site_url('galeri') ?>" class="btn-google-secondary mt-4">Ke Halaman Galeri</a>
             </div>
         </div>
@@ -146,10 +146,10 @@ $popup_state_class = $should_open_modal ? '' : 'hidden';
             <div>
                 <div class="inline-flex items-center gap-2 rounded-full border border-[#4285F4]/15 bg-[#4285F4]/8 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#174EA6]">
                     <span class="google-dot google-dot--blue"></span>
-                    Quick create
+                    New memory
                 </div>
                 <h2 class="mt-3 font-display text-2xl font-bold tracking-tight text-slate-950">Tambah Kenangan</h2>
-                <p class="mt-1.5 text-sm leading-6 text-slate-500">Form ringkas dengan aksen warna Google.</p>
+                <p class="mt-1.5 text-sm leading-6 text-slate-500">Isi singkat, unggah foto, lalu simpan momennya.</p>
             </div>
             <button type="button" class="modal-close" data-modal-close="create-memory-modal" aria-label="Tutup popup">
                 <span aria-hidden="true">&times;</span>

@@ -1,0 +1,13 @@
+# 1. Aturan Indeks Utama Server (Bawaan InfinityFree)
+DirectoryIndex index.php index.html index.htm index2.html
+
+# 2. Aturan Pengalihan Halaman Error Server
+ErrorDocument 403 https://infinityfree.net
+ErrorDocument 404 https://infinityfree.net
+ErrorDocument 500 https://infinityfree.net
+
+# 3. Aturan Routing CodeIgniter 3 agar URL Lancar
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?/$1 [L]

@@ -48,7 +48,7 @@
 
         <h2 class="mt-6 font-display text-3xl font-bold tracking-tight text-slate-950"><?= htmlspecialchars($kenangan->judul) ?></h2>
 
-        <div class="mt-6 rounded-[1.5rem] border border-slate-900/8 bg-slate-50 px-5 py-4 text-sm leading-7 text-slate-600">
+        <div class="detail-desc-box mt-6 rounded-[1.5rem] border border-slate-900/8 bg-slate-50 px-5 py-4 text-sm leading-7 text-slate-600">
             <?php if (!empty($kenangan->deskripsi)): ?>
                 <?= nl2br(htmlspecialchars($kenangan->deskripsi)) ?>
             <?php else: ?>

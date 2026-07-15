@@ -23,11 +23,30 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-$script_dir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
-$script_dir = trim($script_dir, '/.');
-$config['base_url'] = $scheme . '://' . $host . ($script_dir !== '' ? '/' . $script_dir : '') . '/';
+
+if ($host === 'galeri-kenangan.xo.je' || $host === 'www.galeri-kenangan.xo.je') {
+    $config['base_url'] = 'https://galeri-kenangan.xo.je/';
+} else {
+    $forwarded_proto = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '';
+    $request_scheme = $_SERVER['REQUEST_SCHEME'] ?? '';
+    $https_flag = $_SERVER['HTTPS'] ?? '';
+    $server_port = $_SERVER['SERVER_PORT'] ?? '';
+
+    $scheme = 'http';
+    if (
+        $forwarded_proto === 'https' ||
+        $request_scheme === 'https' ||
+        (!empty($https_flag) && $https_flag !== 'off') ||
+        (string) $server_port === '443'
+    ) {
+        $scheme = 'https';
+    }
+
+    $script_dir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
+    $script_dir = trim($script_dir, '/.');
+    $config['base_url'] = $scheme . '://' . $host . ($script_dir !== '' ? '/' . $script_dir : '') . '/';
+}
 
 /*
 |--------------------------------------------------------------------------
