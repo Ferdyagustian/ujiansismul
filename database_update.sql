@@ -1,23 +1,23 @@
--- 1. Buat database baru 'kenangan' jika belum ada
-CREATE DATABASE IF NOT EXISTS kenangan;
-USE kenangan;
+-- Ganti nama database di bawah dengan database InfinityFree Anda.
+-- Contoh: USE `if0_42417193_namadb`;
 
--- 2. Buat tabel utama tb_kenangan
-CREATE TABLE IF NOT EXISTS tb_kenangan (
-    id_kenangan INT AUTO_INCREMENT PRIMARY KEY,
-    judul VARCHAR(100) NOT NULL,
-    kategori VARCHAR(50) NOT NULL,
-    tanggal_momen DATE NOT NULL,
-    deskripsi TEXT
-);
+CREATE TABLE IF NOT EXISTS `tb_kenangan` (
+    `id_kenangan` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `judul` VARCHAR(100) NOT NULL,
+    `kategori` VARCHAR(50) NOT NULL,
+    `tanggal_momen` DATE NOT NULL,
+    `deskripsi` TEXT DEFAULT NULL,
+    PRIMARY KEY (`id_kenangan`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- (Opsional) Jika tabel sudah ada dan masih memiliki kolom 'foto', kita bisa menghapusnya
--- ALTER TABLE tb_kenangan DROP COLUMN foto;
-
--- 3. Buat tabel tb_foto untuk menyimpan banyak gambar
-CREATE TABLE IF NOT EXISTS tb_foto (
-    id_foto INT AUTO_INCREMENT PRIMARY KEY,
-    id_kenangan INT NOT NULL,
-    nama_file VARCHAR(255) NOT NULL,
-    FOREIGN KEY (id_kenangan) REFERENCES tb_kenangan(id_kenangan) ON DELETE CASCADE
-);
+CREATE TABLE IF NOT EXISTS `tb_foto` (
+    `id_foto` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `id_kenangan` INT UNSIGNED NOT NULL,
+    `nama_file` VARCHAR(255) NOT NULL,
+    PRIMARY KEY (`id_foto`),
+    KEY `idx_tb_foto_kenangan` (`id_kenangan`),
+    CONSTRAINT `fk_tb_foto_kenangan`
+        FOREIGN KEY (`id_kenangan`) REFERENCES `tb_kenangan` (`id_kenangan`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

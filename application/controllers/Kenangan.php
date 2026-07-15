@@ -3,19 +3,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Kenangan extends CI_Controller
 {
-    private $upload_path    = './assets/uploads/kenangan/';
+    private $upload_path;
     private $allowed_types  = 'jpg|jpeg|png';
     private $max_size       = 2048; // KB
     private $file_input     = 'foto';
+    private $last_upload_error = NULL;
 
     public function __construct()
     {
         parent::__construct();
+        $this->upload_path = FCPATH . 'assets/uploads/kenangan/';
         $this->load->model('Kenangan_model', 'kenangan');
         $this->load->library('form_validation');
+        $this->_ensure_upload_dir();
     }
 
     public function index()
+    {
+        $this->_render_home();
+    }
+
+    public function gallery()
     {
         $data['title']    = 'Galeri Kenangan';
         $data['kenangan'] = $this->kenangan->get_all();
@@ -27,12 +35,12 @@ class Kenangan extends CI_Controller
 
     public function detail($id = NULL)
     {
-        if ($id === NULL) redirect('kenangan');
+        if ($id === NULL) redirect('galeri');
 
         $kenangan = $this->kenangan->get_by_id($id);
         if ( ! $kenangan) {
             $this->session->set_flashdata('error', 'Data kenangan tidak ditemukan.');
-            redirect('kenangan');
+            redirect('galeri');
         }
 
         $data['title']    = $kenangan->judul . ' — Detail';
@@ -45,7 +53,12 @@ class Kenangan extends CI_Controller
 
     public function create()
     {
-        $data['title'] = 'Tambah Kenangan';
+        if ($this->input->method(TRUE) !== 'POST') {
+            redirect(site_url() . '?popup=create');
+        }
+
+        $data = $this->_build_home_data();
+        $data['show_create_modal'] = TRUE;
 
         $this->form_validation->set_rules('judul',         'Judul',         'required|max_length[100]|trim');
         $this->form_validation->set_rules('kategori',      'Kategori',      'required|max_length[50]|trim');
@@ -53,20 +66,16 @@ class Kenangan extends CI_Controller
         $this->form_validation->set_rules('deskripsi',     'Deskripsi',     'trim');
 
         if ($this->form_validation->run() === FALSE) {
-            $this->load->view('templates/header', $data);
-            $this->load->view('kenangan/kenangan_create', $data);
-            $this->load->view('templates/footer');
+            $this->_render_home($data);
             return;
         }
 
-        // Cek apakah ada file yang diupload (meski multiple, kita cek index 0)
         if (empty($_FILES[$this->file_input]['name'][0])) {
-            $this->session->set_flashdata('error', 'Minimal satu foto wajib diunggah.');
-            redirect('kenangan/create');
+            $data['form_error_message'] = 'Minimal satu foto wajib diunggah.';
+            $this->_render_home($data);
             return;
         }
 
-        // Insert text data first to get ID
         $id_kenangan = $this->kenangan->insert([
             'judul'         => $this->input->post('judul', TRUE),
             'kategori'      => $this->input->post('kategori', TRUE),
@@ -74,32 +83,36 @@ class Kenangan extends CI_Controller
             'deskripsi'     => $this->input->post('deskripsi', TRUE),
         ]);
 
-        // Proses multiple upload
         $uploaded_files = $this->_do_upload_multiple();
-        
-        if (!empty($uploaded_files)) {
-            $batch_data = [];
-            foreach ($uploaded_files as $file) {
-                $batch_data[] = [
-                    'id_kenangan' => $id_kenangan,
-                    'nama_file'   => $file
-                ];
-            }
-            $this->kenangan->insert_foto_batch($batch_data);
+
+        if (empty($uploaded_files)) {
+            $this->kenangan->delete($id_kenangan);
+            $data['form_error_message'] = $this->last_upload_error ?: 'Upload foto gagal. Silakan coba lagi.';
+            $this->_render_home($data);
+            return;
         }
+        
+        $batch_data = [];
+        foreach ($uploaded_files as $file) {
+            $batch_data[] = [
+                'id_kenangan' => $id_kenangan,
+                'nama_file'   => $file
+            ];
+        }
+        $this->kenangan->insert_foto_batch($batch_data);
 
         $this->session->set_flashdata('success', 'Kenangan berhasil ditambahkan!');
-        redirect('kenangan');
+        redirect('galeri');
     }
 
     public function edit($id = NULL)
     {
-        if ($id === NULL) redirect('kenangan');
+        if ($id === NULL) redirect('galeri');
 
         $kenangan = $this->kenangan->get_by_id($id);
         if ( ! $kenangan) {
             $this->session->set_flashdata('error', 'Data kenangan tidak ditemukan.');
-            redirect('kenangan');
+            redirect('galeri');
         }
 
         $data['title']    = 'Edit Kenangan';
@@ -159,12 +172,12 @@ class Kenangan extends CI_Controller
 
     public function delete($id = NULL)
     {
-        if ($id === NULL) redirect('kenangan');
+        if ($id === NULL) redirect('galeri');
 
         $kenangan = $this->kenangan->get_by_id($id);
         if ( ! $kenangan) {
             $this->session->set_flashdata('error', 'Data kenangan tidak ditemukan.');
-            redirect('kenangan');
+            redirect('galeri');
         }
 
         // Hapus semua file fisik foto
@@ -177,11 +190,43 @@ class Kenangan extends CI_Controller
 
         $this->kenangan->delete($id);
         $this->session->set_flashdata('success', 'Kenangan berhasil dihapus!');
-        redirect('kenangan');
+        redirect('galeri');
+    }
+
+    private function _build_home_data()
+    {
+        $stats = $this->kenangan->get_dashboard_stats();
+
+        return [
+            'title' => 'Beranda',
+            'kenangan_total' => $stats['kenangan_total'],
+            'foto_total' => $stats['foto_total'],
+            'kategori_total' => $stats['kategori_total'],
+            'latest_tanggal' => $stats['latest_tanggal'],
+            'show_create_modal' => FALSE,
+            'open_popup_via_query' => ($this->input->get('popup', TRUE) === 'create'),
+        ];
+    }
+
+    private function _render_home($data = [])
+    {
+        $payload = array_merge($this->_build_home_data(), $data);
+
+        $this->load->view('templates/header', $payload);
+        $this->load->view('kenangan/home', $payload);
+        $this->load->view('templates/footer');
     }
 
     private function _do_upload_multiple()
     {
+        $this->last_upload_error = NULL;
+
+        if (!$this->_ensure_upload_dir()) {
+            $this->last_upload_error = 'Folder upload tidak valid atau tidak bisa dibuat.';
+            $this->session->set_flashdata('error', $this->last_upload_error);
+            return [];
+        }
+
         $config = [
             'upload_path'      => $this->upload_path,
             'allowed_types'    => $this->allowed_types,
@@ -189,7 +234,8 @@ class Kenangan extends CI_Controller
             'encrypt_name'     => TRUE,
             'file_ext_tolower' => TRUE,
         ];
-        $this->load->library('upload', $config);
+        $this->load->library('upload');
+        $this->upload->initialize($config);
 
         $uploaded_files = [];
         $files = $_FILES[$this->file_input];
@@ -206,11 +252,34 @@ class Kenangan extends CI_Controller
                 if ($this->upload->do_upload('single_file')) {
                     $uploaded_files[] = $this->upload->data('file_name');
                 } else {
-                    $this->session->set_flashdata('error', strip_tags($this->upload->display_errors()));
+                    $this->last_upload_error = trim(strip_tags($this->upload->display_errors()));
+                    $this->session->set_flashdata('error', $this->last_upload_error);
                 }
             }
         }
 
         return $uploaded_files;
+    }
+
+    private function _ensure_upload_dir()
+    {
+        $upload_root = dirname($this->upload_path);
+
+        if (!is_dir($upload_root)) {
+            if (!@mkdir($upload_root, 0777, TRUE) && !is_dir($upload_root)) {
+                return FALSE;
+            }
+        }
+
+        if (!@mkdir($this->upload_path, 0755, TRUE) && !is_dir($this->upload_path)) {
+            if (!is_dir($this->upload_path)) {
+                return FALSE;
+            }
+        }
+
+        @chmod($upload_root, 0777);
+        @chmod($this->upload_path, 0777);
+
+        return is_writable($this->upload_path);
     }
 }

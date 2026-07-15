@@ -23,7 +23,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/ujian-sismul/';
+$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$script_dir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
+$script_dir = trim($script_dir, '/.');
+$config['base_url'] = $scheme . '://' . $host . ($script_dir !== '' ? '/' . $script_dir : '') . '/';
 
 /*
 |--------------------------------------------------------------------------

@@ -18,6 +18,32 @@ class Kenangan_model extends CI_Model
         return $this->db->get()->result_array();
     }
 
+    public function get_dashboard_stats()
+    {
+        $stats = [];
+
+        $stats['kenangan_total'] = (int) $this->db->count_all($this->table);
+        $stats['foto_total'] = (int) $this->db->count_all($this->table_foto);
+
+        $stats['kategori_total'] = (int) $this->db
+            ->select('COUNT(DISTINCT kategori) AS total', FALSE)
+            ->get($this->table)
+            ->row()
+            ->total;
+
+        $latest = $this->db
+            ->select('tanggal_momen')
+            ->from($this->table)
+            ->order_by($this->pk, 'DESC')
+            ->limit(1)
+            ->get()
+            ->row();
+
+        $stats['latest_tanggal'] = $latest ? $latest->tanggal_momen : NULL;
+
+        return $stats;
+    }
+
     // ----------------------------------------------------------------
     // READ: Ambil satu data kenangan berdasarkan id, beserta semua fotonya
     // ----------------------------------------------------------------
