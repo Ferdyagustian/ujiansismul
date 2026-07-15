@@ -1,47 +1,47 @@
-# System Prompt / Project Brief: MLBB Skin Vault (CodeIgniter 3)
+# Galeri Kenangan (Memories Gallery)
 
-## 1. Konteks dan Peran
-Bertindaklah sebagai Senior Full-Stack Web Developer. Tugas Anda adalah membantu saya membangun aplikasi web CRUD berbasis **CodeIgniter 3 (CI3)** dengan standar proyek tingkat akhir mahasiswa Teknik Informatika. Aplikasi ini adalah proyek ujian praktikum, sehingga kode harus efisien, terstruktur sesuai konsep MVC secara ketat, dan minim dari *bug*.
+Aplikasi "Galeri Kenangan" adalah sebuah sistem manajemen konten (CRUD) sederhana yang dirancang untuk mendokumentasikan momen-momen penting atau kenangan. Aplikasi ini dibangun dengan struktur *Model-View-Controller* (MVC) menggunakan framework **CodeIgniter 3**.
 
-## 2. Deskripsi Proyek
-*   **Nama Aplikasi:** MLBB Skin Vault
-*   **Tema:** Sistem manajemen inventaris digital untuk mendata *hero* dan *skin* Mobile Legends: Bang Bang (fokus pada data *hero meta* di *tier* Glory/Immortal).
-*   **Fokus Utama:** Operasi CRUD (Create, Read, Update, Delete) fungsional dengan fitur **Upload Gambar** (menyimpan file fisik gambar ke *server* dan nama filenya ke *database*).
+## 💻 Tech Stack
 
-## 3. Spesifikasi Teknis & Stack
-*   **Backend:** PHP 7.x/8.x dengan Framework CodeIgniter 3.
-*   **Database:** MySQL.
-*   **Frontend:** HTML5, CSS3, dan framework CSS (seperti Bootstrap atau Tailwind) untuk menghasilkan tata letak *Grid/Cards* yang menyerupai antarmuka *in-game*.
+*   **Backend:** PHP 7.x/8.x dengan Framework CodeIgniter 3
+*   **Database:** MySQL (MariaDB)
+*   **Frontend:** HTML5, CSS3 (termasuk *custom CSS* pada `assets/css/style.css`), dan JavaScript
+*   **Server:** XAMPP (Apache)
 
-## 4. Struktur Database (`db.sql`)
-Saya membutuhkan *script* DDL (Data Definition Language) SQL untuk membuat tabel dengan spesifikasi berikut:
-*   Nama tabel: `tb_heroes`
-*   Kolom:
-    *   `id_hero` (INT, Primary Key, Auto Increment)
-    *   `nama_hero` (VARCHAR, cth: Chou)
-    *   `role` (VARCHAR, cth: Fighter)
-    *   `nama_skin` (VARCHAR, cth: Iori Yagami)
-    *   `tipe_skin` (VARCHAR, cth: KOF)
-    *   `gambar_splash` (VARCHAR) - *hanya menyimpan nama file ekstensi .jpg/.png*.
+## 📖 Keterangan Program
 
-## 5. Instruksi Pengembangan (Kebutuhan Fitur)
-Berikan saya struktur kode (Controller, Model, dan View) untuk mengimplementasikan fitur-fitur berikut secara berurutan:
+Aplikasi ini berfokus pada manajemen data kenangan. Pengguna dapat mencatat berbagai memori dengan informasi seperti judul, kategori, tanggal momen, dan deskripsi detail. Keunggulan utama dari program ini adalah dukungan **Multiple Image Upload**, di mana pengguna dapat melampirkan lebih dari satu foto untuk satu kenangan yang sama. Seluruh file fisik gambar dikelola dengan baik; ketika data kenangan atau foto dihapus, file fisik yang ada di server (dalam folder `/assets/uploads/kenangan/`) juga akan ikut dihapus untuk menghemat ruang penyimpanan.
 
-1.  **Halaman Daftar Anggota Kelompok:**
-    *   Buat satu *Controller* (`Anggota.php`) dan *View* statis khusus yang menampilkan daftar nama anggota (maksimal 4 orang) sesuai ketentuan ujian.
-2.  **Fungsi READ (Galeri):**
-    *   Tampilkan data dari `tb_heroes` pada halaman utama (*dashboard*). Desain harus menggunakan format *Cards* atau galeri agar gambar *splash art* menjadi fokus utama.
-3.  **Fungsi CREATE (Upload Gambar):**
-    *   Integrasikan `<form enctype="multipart/form-data">`.
-    *   Terapkan *library upload* bawaan CI3 dengan validasi tipe file (JPG/PNG) dan ukuran maksimal. Simpan file ke direktori `/assets/uploads/skins/`.
-4.  **Fungsi UPDATE (Replace Gambar):**
-    *   Implementasikan logika pengecekan di *Controller*: 
-        *   Jika *user* mengunggah file gambar baru, hapus gambar lama menggunakan fungsi `unlink()`, simpan gambar baru, dan *update database*.
-        *   Jika *user* tidak mengunggah file baru, lakukan *update* pada field teks lainnya saja tanpa mengubah data gambar.
-5.  **Fungsi DELETE (Hapus Data & File):**
-    *   Saat eksekusi penghapusan, ambil nama file dari *database* terlebih dahulu, jalankan `unlink('./assets/uploads/skins/'.$nama_file)` untuk membersihkan direktori, kemudian jalankan query `DELETE`.
+## 🚀 Fitur Utama
 
-## 6. Penyesuaian Pengumpulan Akhir
-Susun *routing* dan pengaturan config sedemikian rupa agar:
-*   File `db.sql` mudah diletakkan di dalam *root folder* proyek.
-*   Proyek siap dikompres dengan struktur *folder* rapi untuk penamaan akhir file ZIP/RAR (`UJIAN_NAMA_NPM_KELAS`).
+1.  **Daftar Kenangan (Read):** Menampilkan seluruh data kenangan yang telah disimpan dalam bentuk daftar atau galeri.
+2.  **Tambah Kenangan (Create):** Form untuk memasukkan data kenangan baru yang dilengkapi dengan fitur *multiple upload* untuk mengunggah beberapa foto sekaligus.
+3.  **Detail Kenangan:** Menampilkan informasi lengkap mengenai suatu kenangan beserta seluruh foto yang dilampirkan.
+4.  **Edit Kenangan (Update):** Memperbarui informasi teks (judul, kategori, dll.), menambah foto baru, serta kemampuan untuk menghapus foto secara individual pada suatu kenangan.
+5.  **Hapus Kenangan (Delete):** Menghapus data kenangan beserta seluruh relasi fotonya dari database dan menghapus file gambarnya dari direktori server secara otomatis.
+6.  **Halaman Anggota Kelompok:** Halaman statis yang menampilkan daftar nama anggota pengembang proyek.
+
+## 📂 Struktur Database
+
+Database: `kenangan`
+
+1.  **`tb_kenangan`**
+    *   `id_kenangan` (INT, Primary Key, Auto Increment)
+    *   `judul` (VARCHAR)
+    *   `kategori` (VARCHAR)
+    *   `tanggal_momen` (DATE)
+    *   `deskripsi` (TEXT)
+
+2.  **`tb_foto`**
+    *   `id_foto` (INT, Primary Key, Auto Increment)
+    *   `id_kenangan` (INT, Foreign Key)
+    *   `nama_file` (VARCHAR)
+
+## ⚙️ Panduan Instalasi (Lokal)
+
+1. Pastikan Anda memiliki XAMPP atau web server lokal lainnya.
+2. Simpan folder `ujian-sismul` di dalam direktori `htdocs` (untuk XAMPP).
+3. Buka phpMyAdmin, lalu buat database baru dengan nama `kenangan`.
+4. Import file `db.sql` yang ada di root folder proyek ke dalam database `kenangan`.
+5. Akses aplikasi melalui browser di `http://localhost/ujian-sismul`.

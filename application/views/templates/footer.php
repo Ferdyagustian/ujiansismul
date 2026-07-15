@@ -1,23 +1,20 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 
-    </div><!-- /.sv-container -->
+    </div>
 </main>
 
-<!-- ============================================================
-     FOOTER
-     ============================================================ -->
-<footer class="sv-footer">
-    <div class="sv-container">
-        <p class="mb-0">
-            &copy; <?= date('Y') ?> Galeri Kenangan &mdash; Tugas Ujian Sistem Multimedia
-            &nbsp;&middot;&nbsp;
-            <a href="<?= site_url('anggota') ?>">Tim 4IA28</a>
-        </p>
+<footer class="relative z-10 border-t border-slate-900/10 bg-white/70 backdrop-blur">
+    <div class="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-6 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+        <p>&copy; <?= date('Y') ?> Galeri Kenangan. Tugas Ujian Sistem Multimedia.</p>
+        <div class="flex items-center gap-3">
+            <span class="inline-flex items-center gap-2 rounded-full border border-slate-900/10 bg-white px-3 py-1 text-slate-600">
+                <span class="google-dot google-dot--blue"></span>
+                Tim 4IA28
+            </span>
+            <a href="<?= site_url('anggota') ?>" class="font-semibold text-[#4285F4] transition hover:text-[#3367D6]">Lihat anggota</a>
+        </div>
     </div>
 </footer>
-
-<!-- Bootstrap 5 JS (bundle dengan Popper) — diletakkan di akhir body -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

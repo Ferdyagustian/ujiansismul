@@ -73,24 +73,44 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder = TRUE;
 
+$remote_db_host = getenv('DB_HOST') ?: 'sql310.infinityfree.com';
+$remote_db_user = getenv('DB_USERNAME') ?: 'if0_42417193';
+$remote_db_pass = getenv('DB_PASSWORD') ?: '0y2O3NhgaB';
+$remote_db_name = getenv('DB_NAME') ?: 'if0_42417193_kengangan';
+$remote_db_port = (int) (getenv('DB_PORT') ?: 3306);
+
+$connection_mode = getenv('DB_CONNECTION_MODE') ?: 'auto';
+$http_host = $_SERVER['HTTP_HOST'] ?? '';
+$server_name = $_SERVER['SERVER_NAME'] ?? '';
+$is_local_request = in_array($http_host, ['localhost', '127.0.0.1'], TRUE)
+    || in_array($server_name, ['localhost', '127.0.0.1'], TRUE);
+
+$use_remote_db = FALSE;
+if ($connection_mode === 'remote') {
+	$use_remote_db = ($remote_db_pass !== '' && $remote_db_name !== '');
+} elseif ($connection_mode !== 'local') {
+	$use_remote_db = !$is_local_request && $remote_db_pass !== '' && $remote_db_name !== '';
+}
+
 $db['default'] = array(
 	'dsn' => '',
-	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
-	'database' => 'kenangan',
+	'hostname' => $use_remote_db ? $remote_db_host : 'localhost',
+	'username' => $use_remote_db ? $remote_db_user : 'root',
+	'password' => $use_remote_db ? $remote_db_pass : '',
+	'database' => $use_remote_db ? $remote_db_name : 'kenangan',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),
 	'cache_on' => FALSE,
 	'cachedir' => '',
-	'char_set' => 'utf8',
-	'dbcollat' => 'utf8_general_ci',
+	'char_set' => 'utf8mb4',
+	'dbcollat' => 'utf8mb4_unicode_ci',
 	'swap_pre' => '',
 	'encrypt' => FALSE,
 	'compress' => FALSE,
 	'stricton' => FALSE,
+	'port' => $use_remote_db ? $remote_db_port : 3306,
 	'failover' => array(),
 	'save_queries' => TRUE
 );

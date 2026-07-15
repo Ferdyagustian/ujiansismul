@@ -1,0 +1,23 @@
+-- -- Ganti nama database di bawah dengan database InfinityFree Anda.
+-- -- Contoh: USE `if0_42417193_namadb`;
+
+-- CREATE TABLE IF NOT EXISTS `tb_kenangan` (
+--     `id_kenangan` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+--     `judul` VARCHAR(100) NOT NULL,
+--     `kategori` VARCHAR(50) NOT NULL,
+--     `tanggal_momen` DATE NOT NULL,
+--     `deskripsi` TEXT DEFAULT NULL,
+--     PRIMARY KEY (`id_kenangan`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- CREATE TABLE IF NOT EXISTS `tb_foto` (
+--     `id_foto` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+--     `id_kenangan` INT UNSIGNED NOT NULL,
+--     `nama_file` VARCHAR(255) NOT NULL,
+--     PRIMARY KEY (`id_foto`),
+--     KEY `idx_tb_foto_kenangan` (`id_kenangan`),
+--     CONSTRAINT `fk_tb_foto_kenangan`
+--         FOREIGN KEY (`id_kenangan`) REFERENCES `tb_kenangan` (`id_kenangan`)
+--         ON DELETE CASCADE
+--         ON UPDATE CASCADE
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

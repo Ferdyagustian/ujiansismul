@@ -17,27 +17,27 @@ class Anggota extends CI_Controller
         $data['anggota']  = [
             [
                 'nama'  => 'Andi Maulana Firmansyah',
-                'npm'   => '50421004',
+                'npm'   => '50422211',
                 'kelas' => '4IA28',
                 'role'  => 'Backend Developer',
             ],
             [
                 'nama'  => 'Muhammad Faqih Hakim',
-                'npm'   => '50421082',
+                'npm'   => '51422032',
                 'kelas' => '4IA28',
                 'role'  => 'Frontend Developer',
             ],
             [
-                'nama'  => 'Ferdy Agustian Prasetyo',
-                'npm'   => '50421038',
+                'nama'  => 'Ferdy agustian prasetyo',
+                'npm'   => '50422565',
                 'kelas' => '4IA28',
                 'role'  => 'Database Engineer',
             ],
             [
                 'nama'  => 'Muchammad Fadhli Rochman',
-                'npm'   => '50421090',
+                'npm'   => '50422924',
                 'kelas' => '4IA28',
-                'role'  => 'UI/UX Designer',
+                'role'  => 'Tester',
             ],
         ];
 

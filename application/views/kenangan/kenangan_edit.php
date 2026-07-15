@@ -1,119 +1,131 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+<?php $kategoris = ['Keluarga', 'Teman', 'Liburan', 'Sekolah', 'Pekerjaan', 'Lainnya']; ?>
 
-<!-- Page Header -->
-<div class="sv-page-header">
+<section class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
     <div>
-        <h1 class="sv-page-title">Edit <span><?= htmlspecialchars($kenangan->judul) ?></span></h1>
-        <p class="sv-page-subtitle">Perbarui data atau tambah foto kenangan</p>
+        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-400">Edit memory</p>
+        <h1 class="mt-2 font-display text-4xl font-bold tracking-tight text-slate-950"><?= htmlspecialchars($kenangan->judul) ?></h1>
+        <p class="mt-3 max-w-2xl text-base leading-7 text-slate-600">Perbarui informasi kenangan dan kelola foto yang sudah terlampir.</p>
     </div>
-    <a href="<?= site_url('kenangan/detail/' . $kenangan->id_kenangan) ?>" class="btn-sv-ghost">
-        <i class="bi bi-arrow-left"></i> Kembali
+    <a href="<?= site_url('kenangan/detail/' . $kenangan->id_kenangan) ?>" class="btn-google-secondary">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/>
+        </svg>
+        Kembali ke detail
     </a>
-</div>
+</section>
 
-<!-- Flash Error -->
 <?php if ($this->session->flashdata('error')): ?>
-    <div class="sv-alert sv-alert-error" role="alert" style="max-width:640px;margin:0 auto 1.5rem;">
-        <i class="bi bi-exclamation-circle-fill"></i>
+    <div class="status-alert status-alert--error mx-auto mb-6 max-w-4xl" role="alert">
+        <span class="google-dot google-dot--red"></span>
         <?= htmlspecialchars($this->session->flashdata('error')) ?>
     </div>
 <?php endif; ?>
 
 <?php if ($this->session->flashdata('success')): ?>
-    <div class="sv-alert sv-alert-success" role="alert" style="max-width:640px;margin:0 auto 1.5rem; background:rgba(16,185,129,0.1); color:#34d399; padding:1rem; border-radius:8px; border:1px solid rgba(16,185,129,0.2);">
-        <i class="bi bi-check-circle-fill"></i>
+    <div class="status-alert status-alert--success mx-auto mb-6 max-w-4xl" role="alert">
+        <span class="google-dot google-dot--green"></span>
         <?= htmlspecialchars($this->session->flashdata('success')) ?>
     </div>
 <?php endif; ?>
 
-<!-- Form Card -->
-<div class="sv-form-card">
-    <h2 class="sv-form-title">Edit Data Kenangan</h2>
-
-    <?php if (validation_errors()): ?>
-        <div class="sv-validation-errors" role="alert">
-            <?= validation_errors('<ul><li>', '</li></ul>') ?>
-        </div>
-    <?php endif; ?>
-
-    <form action="<?= site_url('kenangan/edit/' . $kenangan->id_kenangan) ?>" method="post" enctype="multipart/form-data" novalidate>
-
-        <div class="sv-form-group">
-            <label for="judul">Judul Kenangan <span style="color:#f87171">*</span></label>
-            <input type="text" id="judul" name="judul" class="sv-form-control" value="<?= set_value('judul', htmlspecialchars($kenangan->judul)) ?>" required>
-        </div>
-
-        <div class="sv-form-group">
-            <label for="kategori">Kategori <span style="color:#f87171">*</span></label>
-            <select id="kategori" name="kategori" class="sv-form-control" required style="appearance: auto;">
-                <?php
-                $kategoris = ['Keluarga', 'Teman', 'Liburan', 'Sekolah', 'Pekerjaan', 'Lainnya'];
-                foreach ($kategoris as $k):
-                    $selected = (set_value('kategori', $kenangan->kategori) === $k) ? 'selected' : '';
-                ?>
-                    <option value="<?= $k ?>" <?= $selected ?>><?= $k ?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-
-        <div class="sv-form-group">
-            <label for="tanggal_momen">Tanggal Momen <span style="color:#f87171">*</span></label>
-            <input type="date" id="tanggal_momen" name="tanggal_momen" class="sv-form-control" value="<?= set_value('tanggal_momen', htmlspecialchars($kenangan->tanggal_momen)) ?>" required>
-        </div>
-
-        <div class="sv-form-group">
-            <label for="deskripsi">Cerita / Deskripsi</label>
-            <textarea id="deskripsi" name="deskripsi" class="sv-form-control" rows="3"><?= set_value('deskripsi', htmlspecialchars($kenangan->deskripsi ?? '')) ?></textarea>
-        </div>
-
-        <!-- Kelola Foto Saat Ini -->
-        <div class="sv-form-group">
-            <label>Foto Saat Ini</label>
-            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 1rem;">
-                <?php if (!empty($kenangan->fotos)): ?>
-                    <?php foreach($kenangan->fotos as $f): ?>
-                        <div style="position:relative; width:120px; height:120px; border-radius:8px; overflow:hidden; border:1px solid rgba(255,255,255,0.1);">
-                            <img src="<?= base_url('assets/uploads/kenangan/' . $f['nama_file']) ?>" style="width:100%; height:100%; object-fit:cover;">
-                            <a href="<?= site_url('kenangan/hapus_foto/' . $kenangan->id_kenangan . '/' . $f['id_foto']) ?>" 
-                               class="btn-sv-danger" 
-                               style="position:absolute; top:4px; right:4px; padding:0.25rem 0.5rem; font-size:0.75rem;"
-                               onclick="return confirm('Hapus foto ini?');">
-                                <i class="bi bi-trash3"></i>
-                            </a>
-                        </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p style="color:var(--text-muted); font-size:0.875rem;">Tidak ada foto terlampir.</p>
-                <?php endif; ?>
+<section class="mx-auto max-w-4xl">
+    <div class="surface-card p-6 sm:p-8">
+        <div class="mb-8 flex items-start justify-between gap-4">
+            <div>
+                <h2 class="font-display text-2xl font-bold text-slate-950">Edit Data Kenangan</h2>
+                <p class="mt-2 text-sm text-slate-500">Anda bisa memperbarui teks dan menambahkan foto baru kapan saja.</p>
             </div>
-            
-            <label>Tambah Foto Lagi (Opsional)</label>
-            <div class="sv-file-zone">
-                <input type="file" id="foto" name="foto[]" accept="image/jpeg,image/png,.jpg,.jpeg,.png" multiple onchange="previewImages(this)">
-                <div class="sv-file-zone-label" id="fileZoneLabel">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                    </svg>
-                    <span>Klik untuk tambah gambar baru</span>
-                    <small>Bisa pilih lebih dari satu file</small>
+            <span class="soft-badge text-xs text-slate-500">Update board</span>
+        </div>
+
+        <?php if (validation_errors()): ?>
+            <div class="validation-panel mb-6" role="alert">
+                <?= validation_errors('<ul><li>', '</li></ul>') ?>
+            </div>
+        <?php endif; ?>
+
+        <form action="<?= site_url('kenangan/edit/' . $kenangan->id_kenangan) ?>" method="post" enctype="multipart/form-data" novalidate class="space-y-8">
+            <div class="grid gap-6 md:grid-cols-2">
+                <div class="md:col-span-2">
+                    <label for="judul" class="field-label">Judul Kenangan <span class="text-[#EA4335]">*</span></label>
+                    <input type="text" id="judul" name="judul" class="field-input" value="<?= set_value('judul', $kenangan->judul) ?>" required>
+                </div>
+
+                <div>
+                    <label for="kategori" class="field-label">Kategori <span class="text-[#EA4335]">*</span></label>
+                    <select id="kategori" name="kategori" class="field-input" required>
+                        <?php foreach ($kategoris as $k): ?>
+                            <option value="<?= $k ?>" <?= set_value('kategori', $kenangan->kategori) === $k ? 'selected' : '' ?>><?= $k ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="tanggal_momen" class="field-label">Tanggal Momen <span class="text-[#EA4335]">*</span></label>
+                    <input type="date" id="tanggal_momen" name="tanggal_momen" class="field-input" value="<?= set_value('tanggal_momen', $kenangan->tanggal_momen) ?>" required>
+                </div>
+
+                <div class="md:col-span-2">
+                    <label for="deskripsi" class="field-label">Cerita / Deskripsi</label>
+                    <textarea id="deskripsi" name="deskripsi" class="field-input min-h-[132px]"><?= set_value('deskripsi', $kenangan->deskripsi ?? '') ?></textarea>
                 </div>
             </div>
-            <div id="imagePreviewContainer" style="display:flex; gap:10px; margin-top:1rem; flex-wrap:wrap;"></div>
-        </div>
 
-        <!-- Actions -->
-        <div class="sv-form-actions">
-            <button type="submit" class="btn-sv-primary">
-                <i class="bi bi-check-lg"></i> Simpan Perubahan
-            </button>
-            <a href="<?= site_url('kenangan/detail/' . $kenangan->id_kenangan) ?>" class="btn-sv-ghost">
-                Batal
-            </a>
-        </div>
-    </form>
-</div>
+            <div>
+                <div class="mb-4 flex items-center justify-between gap-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900">Foto Saat Ini</h3>
+                        <p class="text-sm text-slate-500">Hapus satu per satu bila diperlukan.</p>
+                    </div>
+                    <span class="soft-badge text-xs text-slate-500"><?= !empty($kenangan->fotos) ? count($kenangan->fotos) : 0 ?> file</span>
+                </div>
 
-<div style="padding-bottom:3rem;"></div>
+                <?php if (!empty($kenangan->fotos)): ?>
+                    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                        <?php foreach ($kenangan->fotos as $f): ?>
+                            <div class="relative overflow-hidden rounded-3xl border border-slate-900/10 bg-white p-2 shadow-sm">
+                                <img src="<?= base_url('assets/uploads/kenangan/' . $f['nama_file']) ?>" alt="Foto kenangan" class="aspect-square w-full rounded-[1.25rem] object-cover">
+                                <a href="<?= site_url('kenangan/hapus_foto/' . $kenangan->id_kenangan . '/' . $f['id_foto']) ?>" class="absolute right-4 top-4 inline-flex items-center rounded-full border border-white/60 bg-white/95 px-3 py-1 text-xs font-semibold text-[#EA4335] shadow-sm backdrop-blur transition hover:bg-white" onclick="return confirm('Hapus foto ini?');">
+                                    Hapus
+                                </a>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <div class="rounded-3xl border border-dashed border-slate-300 bg-slate-50 px-5 py-8 text-center text-sm text-slate-500">
+                        Tidak ada foto terlampir.
+                    </div>
+                <?php endif; ?>
+            </div>
+
+            <div>
+                <label for="foto" class="field-label">Tambah Foto Baru</label>
+                <label class="upload-zone mt-2 block cursor-pointer" for="foto">
+                    <input type="file" id="foto" name="foto[]" accept="image/jpeg,image/png,.jpg,.jpeg,.png" multiple class="hidden" onchange="previewImages(this)">
+                    <span class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-[#34A853]/20 bg-[#34A853]/10 text-[#34A853]">
+                        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V6m0 0L8.25 9.75M12 6l3.75 3.75M4.5 15.75v2.625A1.125 1.125 0 0 0 5.625 19.5h12.75A1.125 1.125 0 0 0 19.5 18.375V15.75"/>
+                        </svg>
+                    </span>
+                    <span class="mt-4 block text-base font-semibold text-slate-800">Pilih gambar tambahan</span>
+                    <span class="mt-2 block text-sm text-slate-500">Boleh lebih dari satu file dalam sekali unggah.</span>
+                </label>
+                <div id="imagePreviewContainer" class="mt-4 flex flex-wrap gap-3"></div>
+            </div>
+
+            <div class="flex flex-wrap gap-3">
+                <button type="submit" class="btn-google-primary">
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/>
+                    </svg>
+                    Simpan Perubahan
+                </button>
+                <a href="<?= site_url('kenangan/detail/' . $kenangan->id_kenangan) ?>" class="btn-google-secondary">Batal</a>
+            </div>
+        </form>
+    </div>
+</section>
 
 <script>
 function previewImages(input) {
@@ -125,17 +137,11 @@ function previewImages(input) {
             const reader = new FileReader();
             reader.onload = function(e) {
                 const imgWrap = document.createElement('div');
-                imgWrap.style.width = '100px';
-                imgWrap.style.height = '100px';
-                imgWrap.style.borderRadius = '8px';
-                imgWrap.style.overflow = 'hidden';
-                imgWrap.style.border = '1px solid rgba(255,255,255,0.1)';
+                imgWrap.className = 'preview-tile';
                 
                 const img = document.createElement('img');
                 img.src = e.target.result;
-                img.style.width = '100%';
-                img.style.height = '100%';
-                img.style.objectFit = 'cover';
+                img.className = 'h-full w-full object-cover';
                 
                 imgWrap.appendChild(img);
                 container.appendChild(imgWrap);
